@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PembeliController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\AlatController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('admin.index');
 // });
+
+Route::middleware(['auth'])-> group(function(){
 Route :: get("/",[LoginController::class,'showLoginForm'])->name('login');
 Route::get('riwayat', [ProdukController::class, 'join'])->name('join');
 
@@ -31,6 +35,16 @@ Route::get('edit/{id}', [PembeliController::class, 'edit'])->name('pembeli.edit'
 Route::post('update/{id}', [PembeliController::class, 'update'])->name('pembeli.update');
 Route::post('delete/{id}', [PembeliController::class, 'delete'])->name('pembeli.delete');
 });
+
+Route ::prefix("alat")->group(function(){
+Route::get('/', [alatController::class, 'index'])->name('alat.index');
+Route::get('add', [alatController::class, 'create'])->name('alat.create');
+Route::post('store', [alatController::class, 'store'])->name('alat.store');
+Route::get('edit/{id}', [alatController::class, 'edit'])->name('alat.edit');
+Route::post('update/{id}', [alatController::class, 'update'])->name('alat.update');
+Route::post('delete/{id}', [alatController::class, 'delete'])->name('alat.delete');
+});
+
 Route ::prefix("produk")->group(function(){
 Route::get('/', [ProdukController::class, 'index'])->name('produk.index');
 Route::get('add', [ProdukController::class, 'create'])->name('produk.create');
@@ -40,6 +54,7 @@ Route::post('update/{id}', [ProdukController::class, 'update'])->name('produk.up
 Route::post('delete/{id}', [ProdukController::class, 'delete'])->name('produk.delete');
 Route::post('recycle/{id}', [ProdukController::class, 'recycle'])->name('produk.recycle');
 Route::get('restore/{id}', [ProdukController::class, 'restore'])->name('produk.restore');
+});
 });
 
 Auth::routes();
